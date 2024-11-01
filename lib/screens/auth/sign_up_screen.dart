@@ -1,3 +1,4 @@
+import "package:client_management_system/success.dart";
 import "package:client_management_system/widgets/custom_text_form_field.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/foundation.dart";
@@ -21,6 +22,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Success()),
+          );
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           if (kDebugMode) {
