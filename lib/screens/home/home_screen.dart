@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: AppBarWidget(title: 'Client Management'),
+      appBar: AppBarWidget(),
       drawer: DrawerWidget(),
       body: ClientManagementScreen(),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 //Firebase
 import 'package:client_management_system/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-//Auth Gate
+
 import 'package:client_management_system/screens/auth/auth_gate.dart';
 
 void main() async {

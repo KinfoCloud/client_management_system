@@ -1,8 +1,8 @@
-import 'package:client_management_system/models/client.dart';
 import 'package:client_management_system/screens/new_client_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:client_management_system/models/client.dart';
 import 'package:client_management_system/services/client_service.dart';
 import 'package:client_management_system/widgets/client_list_item.dart';
-import 'package:flutter/material.dart';
 
 class ClientManagementScreen extends StatefulWidget {
   const ClientManagementScreen({super.key});
@@ -86,6 +86,11 @@ class _ClientManagementScreenState extends State<ClientManagementScreen> {
         SizedBox(
           height: 50,
           child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: const Color(0xFF6D27E7),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8))),
             onPressed: () {
               Navigator.push(
                 context,
@@ -94,7 +99,10 @@ class _ClientManagementScreenState extends State<ClientManagementScreen> {
               ).then((_) => _loadClients());
             },
             icon: const Icon(Icons.add),
-            label: const Text('New Client'),
+            label: const Text(
+              'New Client',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+            ),
           ),
         ),
       ],

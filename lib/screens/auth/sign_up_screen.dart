@@ -1,4 +1,4 @@
-import "package:client_management_system/success.dart";
+import "package:client_management_system/widgets/success.dart";
 import "package:client_management_system/widgets/custom_text_form_field.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/foundation.dart";
@@ -76,6 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       const SizedBox(height: 16.0),
                       CustomTextFormField(
+                        icon: Icons.email,
                         label: "Email",
                         textController: _emailController,
                         validator: (value) {
@@ -87,6 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       const SizedBox(height: 16.0),
                       CustomTextFormField(
+                        icon: Icons.password,
                         label: "Password",
                         textController: _passwordController,
                         validator: (value) {

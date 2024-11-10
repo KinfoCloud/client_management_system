@@ -74,6 +74,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       const SizedBox(height: 16.0),
                       CustomTextFormField(
+                        icon: Icons.email,
                         label: "Email",
                         textController: _emailController,
                         validator: (value) {
@@ -85,6 +86,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       const SizedBox(height: 16.0),
                       CustomTextFormField(
+                        icon: Icons.lock,
                         label: "Password",
                         textController: _passwordController,
                         validator: (value) {

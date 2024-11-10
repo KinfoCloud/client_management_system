@@ -5,14 +5,16 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? textController;
   final String? Function(String?)? validator;
   final bool obscureText;
+  final IconData icon;
 
   const CustomTextFormField({
-    super.key,
+    Key? key,
     required this.label,
     this.textController,
     this.validator,
-    this.obscureText = false, // Default is false, making it optional
-  });
+    this.obscureText = false,
+    required this.icon,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: label,
+        prefixIcon: Icon(icon),
         labelStyle: const TextStyle(
           color: Color(0xFF9CA3AF),
           fontSize: 16,
