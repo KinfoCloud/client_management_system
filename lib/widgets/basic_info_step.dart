@@ -1,4 +1,5 @@
 import 'package:client_management_system/widgets/custom_text_form_field.dart';
+import 'package:client_management_system/widgets/styled_dropdown_button_form_field.dart';
 import 'package:client_management_system/widgets/file_upload_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -7,26 +8,30 @@ class BasicInfoStep extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
-  final TextEditingController agentController;
   final Function(bool) onGeolocationToggle;
   final Function(String) onRequiredImageChanged;
   final Function(String) onOptionalImageChanged;
   final bool geolocationEnabled;
   final File? requiredImage;
   final File? optionalImage;
+  final String? selectedAgent;
+  final Function(String?) onAgentChanged;
+  final List<String> agentOptions;
 
   const BasicInfoStep({
     super.key,
     required this.nameController,
     required this.emailController,
     required this.phoneController,
-    required this.agentController,
+    required this.agentOptions,
     required this.onGeolocationToggle,
     required this.onRequiredImageChanged,
     required this.onOptionalImageChanged,
+    required this.geolocationEnabled,
+    required this.selectedAgent,
+    required this.onAgentChanged,
     this.requiredImage,
     this.optionalImage,
-    required this.geolocationEnabled,
   });
 
   @override
@@ -77,10 +82,15 @@ class BasicInfoStep extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: CustomTextFormField(
-                    label: 'Agent',
-                    textController: agentController,
+                  child: StyledDropdownButtonFormField(
+                    value: selectedAgent,
+                    labelText: 'Client Agent',
                     icon: Icons.person_outline,
+                    items: agentOptions
+                        .map((agent) =>
+                            DropdownMenuItem(value: agent, child: Text(agent)))
+                        .toList(),
+                    onChanged: onAgentChanged,
                   ),
                 ),
               ],

@@ -1,5 +1,6 @@
 import 'package:client_management_system/widgets/app_bar_widget.dart';
 import 'package:client_management_system/widgets/basic_info_step.dart';
+import 'package:client_management_system/widgets/projects_step.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,11 +32,17 @@ class NewClientScreenState extends State<NewClientScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _agentController = TextEditingController();
 
   bool _geolocationEnabled = false;
   File? _requiredImage;
   File? _optionalImage;
+  String? _selectedAgent;
+
+  final List<String> _agentOptions = [
+    'Agent 1',
+    'Agent 2',
+    'Agent 3',
+  ];
 
   final List<String> _stepTitles = [
     'Basic Info',
@@ -45,6 +52,7 @@ class NewClientScreenState extends State<NewClientScreen> {
     'KPIs',
     'Summary',
   ];
+  List<Map<String, dynamic>> _projects = [];
 
   @override
   void initState() {
@@ -68,7 +76,6 @@ class NewClientScreenState extends State<NewClientScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    _agentController.dispose();
     super.dispose();
   }
 
@@ -114,7 +121,9 @@ class NewClientScreenState extends State<NewClientScreen> {
           nameController: _nameController,
           emailController: _emailController,
           phoneController: _phoneController,
-          agentController: _agentController,
+          agentOptions: _agentOptions,
+          selectedAgent: _selectedAgent,
+          onAgentChanged: (value) => setState(() => _selectedAgent = value),
           onGeolocationToggle: (value) =>
               setState(() => _geolocationEnabled = value),
           onRequiredImageChanged: _handleRequiredImageChanged,
@@ -124,7 +133,13 @@ class NewClientScreenState extends State<NewClientScreen> {
           geolocationEnabled: _geolocationEnabled,
         );
       case 1:
-        return const Placeholder(child: Text('Projects Step'));
+        return ProjectsStep(
+            projects: _projects,
+            onProjectsChanged: (updatedProjects) {
+              setState(() {
+                _projects = updatedProjects;
+              });
+            });
       case 2:
         return const Placeholder(child: Text('Master Stores Step'));
       case 3:
@@ -155,7 +170,7 @@ class NewClientScreenState extends State<NewClientScreen> {
     if (_nameController.text.isEmpty ||
         _emailController.text.isEmpty ||
         _phoneController.text.isEmpty ||
-        _agentController.text.isEmpty) {
+        _selectedAgent == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all required fields')),
       );
@@ -185,7 +200,7 @@ class NewClientScreenState extends State<NewClientScreen> {
           'name': _nameController.text,
           'email': _emailController.text,
           'phoneNumber': _phoneController.text,
-          'agent': _agentController.text,
+          'agent': _selectedAgent,
           'geolocationEnabled': _geolocationEnabled,
           'requiredImageUrl': requiredImageUrl,
           'optionalImageUrl': optionalImageUrl,
