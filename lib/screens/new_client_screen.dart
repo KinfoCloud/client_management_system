@@ -1,6 +1,9 @@
 import 'package:client_management_system/widgets/app_bar_widget.dart';
 import 'package:client_management_system/widgets/basic_info_step.dart';
+import 'package:client_management_system/widgets/kpis_step.dart';
+import 'package:client_management_system/widgets/master_stores_step.dart';
 import 'package:client_management_system/widgets/projects_step.dart';
+import 'package:client_management_system/widgets/skus_step.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,6 +56,9 @@ class NewClientScreenState extends State<NewClientScreen> {
     'Summary',
   ];
   List<Map<String, dynamic>> _projects = [];
+  List<String> _masterStores = [];
+  List<String> _skus = [];
+  List<Map<String, dynamic>> _kpis = [];
 
   @override
   void initState() {
@@ -141,11 +147,33 @@ class NewClientScreenState extends State<NewClientScreen> {
               });
             });
       case 2:
-        return const Placeholder(child: Text('Master Stores Step'));
+        return MasterStoresStep(
+            masterStores: _masterStores,
+            onMasterStoresChanged: (updatedStores) {
+              setState(() {
+                _masterStores = updatedStores;
+              });
+            },
+            projects: _projects);
       case 3:
-        return const Placeholder(child: Text('SKUs Step'));
+        return SKUsStep(
+            skus: _skus,
+            onSkusChanged: (updatedSKUs) {
+              setState(() {
+                _skus = updatedSKUs;
+              });
+            },
+            projects: _projects);
       case 4:
-        return const Placeholder(child: Text('KPIs Step'));
+        return KPIsStep(
+          kpis: _kpis,
+          onKPIsChanged: (updatedKPIs) {
+            setState(() {
+              _kpis = updatedKPIs as List<Map<String, dynamic>>;
+            });
+          },
+          projects: _projects,
+        );
       case 5:
         return const Placeholder(child: Text('Summary Step'));
       default:
@@ -204,6 +232,9 @@ class NewClientScreenState extends State<NewClientScreen> {
           'geolocationEnabled': _geolocationEnabled,
           'requiredImageUrl': requiredImageUrl,
           'optionalImageUrl': optionalImageUrl,
+          'skus': _skus,
+          'projects': _projects,
+          'kpis': _kpis,
           'createdAt': FieldValue.serverTimestamp(),
         });
 
