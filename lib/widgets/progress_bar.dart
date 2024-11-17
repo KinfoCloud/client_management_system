@@ -18,46 +18,58 @@ class ProgressBar extends StatelessWidget {
         final double dotSize = isCompact ? 24 : 40;
         final double fontSize = isCompact ? 10 : 12;
         final double lineHeight = isCompact ? 3 : 5;
-        final EdgeInsets padding = isCompact
-            ? const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0)
-            : const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0);
 
         return Container(
           width: double.infinity,
-          padding: padding,
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Column(
             children: [
+              // Progress Dots and Lines
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: List.generate(steps.length * 2 - 1, (index) {
                   if (index.isEven) {
-                    return _buildProgressDot(
-                        context, index ~/ 2, dotSize, fontSize);
+                    // Progress Dot
+                    return SizedBox(
+                      width: dotSize,
+                      child: _buildProgressDot(context, index ~/ 2, dotSize),
+                    );
                   } else {
+                    // Progress Line
                     return Expanded(
-                        child: _buildProgressLine(
-                            context, index ~/ 2, lineHeight));
+                      child:
+                          _buildProgressLine(context, index ~/ 2, lineHeight),
+                    );
                   }
                 }),
               ),
-              if (!isCompact) const SizedBox(height: 16),
-              if (!isCompact)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: steps.asMap().entries.map((entry) {
-                    return Expanded(
+
+              const SizedBox(height: 8),
+
+              // Step Titles (Text Below Dots)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: steps.asMap().entries.map((entry) {
+                  return Flexible(
+                    flex: 1,
+                    child: Center(
                       child: Text(
                         entry.value,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                          fontSize: fontSize,
                           color: entry.key <= currentStep
                               ? Theme.of(context).primaryColor
                               : Colors.grey,
-                          fontSize: fontSize,
                         ),
+                        overflow: TextOverflow.ellipsis, // Prevents wrapping
+                        maxLines: 1, // Ensures only one line
                       ),
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ],
           ),
         );
@@ -65,46 +77,36 @@ class ProgressBar extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressDot(
-      BuildContext context, int index, double size, double fontSize) {
+  Widget _buildProgressDot(BuildContext context, int index, double size) {
     bool isCompleted = index < currentStep;
     bool isCurrent = index == currentStep;
     bool isActive = isCompleted || isCurrent;
 
-    return Column(
-      children: [
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isCompleted
-                ? Colors.green
-                : (isCurrent
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey[300]),
-            border: Border.all(
-              color: isActive ? Colors.transparent : Colors.grey,
-              width: 2,
-            ),
-          ),
-          child: Center(
-            child: isCompleted
-                ? Icon(Icons.check, color: Colors.white, size: size * 0.5)
-                : FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '${index + 1}',
-                      style: TextStyle(
-                        color: isCurrent ? Colors.white : Colors.grey[600],
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSize,
-                      ),
-                    ),
-                  ),
-          ),
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isCompleted
+            ? Colors.green
+            : (isCurrent ? Theme.of(context).primaryColor : Colors.grey[300]),
+        border: Border.all(
+          color: isActive ? Colors.transparent : Colors.grey,
+          width: 2,
         ),
-      ],
+      ),
+      child: Center(
+        child: isCompleted
+            ? Icon(Icons.check, color: Colors.white, size: size * 0.5)
+            : Text(
+                '${index + 1}',
+                style: TextStyle(
+                  fontSize: size * 0.4,
+                  color: isCurrent ? Colors.white : Colors.grey[600],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+      ),
     );
   }
 
